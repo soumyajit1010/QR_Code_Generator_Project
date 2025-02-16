@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <link rel="stylesheet" href="./style.css">
+
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600&display=swap');
+    </style>
+</head>
+
+<body>
+    <h1>QR Code Generator</h1>
+    <input type="text" id="urlInput" placeholder="Enter URL here">
+    <button id="generateBtn">Generate QR Code</button>
+    <div id="qrContainer"></div>
+
+    <script>
+        document.getElementById("generateBtn").addEventListener("click", () => {
+            const url = document.getElementById("urlInput").value;
+            if (!url) {
+                alert("Please enter a URL");
+                return;
+            }
+
+            fetch("https://qr-code-backend-8cu9.onrender.com/generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ url })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("qrContainer").innerHTML =
+                        `<img src="${data.qrCodeUrl}" alt="QR Code">`;
+                })
+                .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+
+</html>
