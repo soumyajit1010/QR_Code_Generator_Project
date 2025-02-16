@@ -1,5 +1,5 @@
 {
-  "type": "commonjs",
+  "type": "module",
   "name": "qr-code-generator-backend",
   "version": "1.0.0",
   "description": "Backend for QR Code Generator using Express and Render",
