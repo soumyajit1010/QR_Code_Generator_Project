@@ -1,35 +1,20 @@
-import express from "express";
-import qr from "qr-image";
-import fs from "fs";
-import cors from "cors";
+const express = require('express');
+const qr = require('qr-image');
+const cors = require('cors');
 
 const app = express();
-const PORT = 3000;
-
-app.use(express.json());
 app.use(cors());
-app.use(express.static("public"));
+app.use(express.json());
 
-app.post("/generate", (req, res) => {
-  const { url } = req.body;
-  if (!url) return res.status(400).json({ error: "URL is required" });
-
-  const qrPath = "public/generated/qrcode.png";
-  if (!fs.existsSync("public/generated")) fs.mkdirSync("public/generated", { recursive: true });
-
-  const qr_svg = qr.image(url, { type: "png" });
-  const stream = fs.createWriteStream(qrPath);
-
-  qr_svg.pipe(stream);
-
-  stream.on("finish", () => {
-    res.json({ qrCodeUrl: "/generated/qrcode.png" });
-  });
-
-  stream.on("error", (err) => {
-    console.error("Stream Error:", err);
-    res.status(500).json({ error: "Failed to generate QR code" });
-  });
+app.post('/generate', (req, res) => {
+    const { url } = req.body;
+    if (!url) {
+        return res.status(400).send('URL is required');
+    }
+    const qr_svg = qr.image(url, { type: 'png' });
+    res.type('png');
+    qr_svg.pipe(res);
 });
 
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Server running on port ${port}`));
