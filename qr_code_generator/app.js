@@ -1,6 +1,6 @@
-const express = require('express');
-const qr = require('qr-image');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
+import qr from 'qr-image';
 
 const app = express();
 app.use(cors());
